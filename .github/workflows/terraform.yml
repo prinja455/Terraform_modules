@@ -30,9 +30,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ 895c4706-095d-49f6-8686-2dde370c48b6 }}
-          tenant-id: ${{ 7e96703d-7c24-4c9a-befd-764b5b17b075 }}
-          subscription-id: ${{ 3f8e2e2f-181a-4328-8035-a3414dc420f2 }}
+          client-id:  895c4706-095d-49f6-8686-2dde370c48b6 
+          tenant-id:  7e96703d-7c24-4c9a-befd-764b5b17b075 
+          subscription-id:  3f8e2e2f-181a-4328-8035-a3414dc420f2
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -70,9 +70,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ 895c4706-095d-49f6-8686-2dde370c48b6 }}
-          tenant-id: ${{  7e96703d-7c24-4c9a-befd-764b5b17b075 }}
-          subscription-id: ${{  3f8e2e2f-181a-4328-8035-a3414dc420f2 }}
+          client-id:  895c4706-095d-49f6-8686-2dde370c48b6 
+          tenant-id:  7e96703d-7c24-4c9a-befd-764b5b17b075 
+          subscription-id:   3f8e2e2f-181a-4328-8035-a3414dc420f2 
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
