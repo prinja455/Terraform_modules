@@ -1,0 +1,97 @@
+name: Terraform CI-CD
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - feature
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  terraform-dev:
+    name: Terraform DEV
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: parent_module/dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id:  895c4706-095d-49f6-8686-2dde370c48b6 
+          tenant-id:  7e96703d-7c24-4c9a-befd-764b5b17b075 
+          subscription-id:  3f8e2e2f-181a-4328-8035-a3414dc420f2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="terraform.tfvars"
+
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve -var-file="terraform.tfvars"
+
+
+  terraform-test:
+    name: Terraform TEST
+    runs-on: ubuntu-latest
+    needs: terraform-dev
+
+    defaults:
+      run:
+        working-directory: parent_module/test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id:  895c4706-095d-49f6-8686-2dde370c48b6 
+          tenant-id:  7e96703d-7c24-4c9a-befd-764b5b17b075 
+          subscription-id:   3f8e2e2f-181a-4328-8035-a3414dc420f2 
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="terraform.tfvars"
+
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve -var-file="terraform.tfvars"
+
+
+  
